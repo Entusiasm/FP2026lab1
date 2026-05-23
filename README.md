@@ -1,8 +1,50 @@
-## sbt project compiled with Scala 3
+# Вариант 18. Фабрика игрушек
 
-### Usage
+Фабрика получает материалы, собирает игрушки и отслеживает брак.
 
-This is a normal sbt project. You can compile code with `sbt compile`, run it with `sbt run`, and `sbt console` will start a Scala 3 REPL.
+## Запуск
 
-For more information on the sbt-dotty plugin, see the
-[scala3-example-project](https://github.com/scala/scala3-example-project/blob/main/README.md).
+```bash
+sbt run
+Для правильного отображения русских символов в консоли Windows перед запуском выполните:
+
+bash
+chcp 65001
+
+Структура проекта
+text
+src/main/scala/
+    ├── monads/      — реализации монад (Monad, IO, Reader, Writer, State)
+    ├── domain/      — предметная область (типы, Reader/Writer/State функции)
+    ├── plan/        — сценарий IO (действия меню)
+    └── ui/          — меню и цикл взаимодействия
+Что где используется
+Reader (ReaderFunctions.scala)
+Чтение конфигурации фабрики:
+
+recipeOf(product) — рецепт изготовления игрушки
+
+productionCost(product, quantity) — стоимость материалов для партии
+
+canProduce(product, quantity, available) — достаточно ли материалов
+
+isDefectAllowed(currentDefectRate) — проверка допустимого уровня брака
+
+Writer (WriterFunctions.scala)
+Логирование событий: получение материалов, производство, инспекция брака, продвижение смены. Также используется внутри StateTransitions для записи переходов.
+
+State (StateTransitions.scala)
+Состояние фабрики: материалы, готовые и бракованные игрушки, часы смены.
+
+Переходы:
+
+receiveMaterial — добавить материалы на склад
+
+runAssembly — собрать партию игрушек (списывает материалы, добавляет готовые/бракованные)
+
+inspectBatch — проверка общего процента брака
+
+advanceShift — переход к следующему часу смены (при достижении 8 часов смена сбрасывается)
+
+IO (Plan.scala, ui.scala)
+Взаимодействие через консольное меню: получить материалы, собрать игрушки, проверить брак, продвинуть время, показать состояние.
