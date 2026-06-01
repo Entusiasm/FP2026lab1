@@ -17,7 +17,7 @@ case class IO[A](run: () => A):
   def flatMap[B](f: A => IO[B]): IO[B] = IO(() => f(run()).run())   
 
 object IO:
-  def pure[A](a: A): IO[A] = IO(() => a)                    // pure: поднимает чистое значение в контекст IO (без эффектов)
+  def pure[A](a: A): IO[A] = IO(() => a)                    // поднимает чистое значение в контекст IO (без эффектов)
   
   given ioMonad: Monad[IO] with
     def pure[A](a: A): IO[A] = IO.pure(a)

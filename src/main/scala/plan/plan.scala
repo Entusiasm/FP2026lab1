@@ -60,3 +60,5 @@ object Plan:
     println(s"Часы смены: ${state.shiftHours}/${config.shiftDuration}")
     println("===========================\n")
   }
+
+  def readCommandString: IO[String] = IO(() => scala.io.StdIn.readLine())

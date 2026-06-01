@@ -1,5 +1,4 @@
-import ui.UI
+import ui.MainMenu
 
 @main def main(): Unit =
-  val ui = UI()
-  ui.run().unsafeRun()
+  MainMenu.run()
